@@ -36,3 +36,5 @@ also install conda install -c conda-forge imutils
 
 
 We’ll then use dlib for its implementation of correlation filters. We could use OpenCV here as well; however, the dlib object tracking implementation was a bit easier to work with for this project.
+
+THanks https://www.pyimagesearch.com/
