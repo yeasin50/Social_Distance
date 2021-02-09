@@ -63,8 +63,10 @@ class CentroidTracker():
         # 0 means startPoint and 1 means endPoint
         for (i, (x0, y0, x1, y1)) in enumerate(bbox):
             #calculate center of bounding box and return as int 
-            cX = int((x0 + x1) /2.0)
-            cY = int((y0 + y1) /2.0)
+
+            cX = (x0 + x1) //2.0
+            cY = (y0 + y1) //2.0
+
             inputCentroids[i] = (cX, cY)
 
 
@@ -98,6 +100,7 @@ class CentroidTracker():
                     continue
 
                 #else we need set new centroid and reset disappeared counter
+
                 objectID = objectIDs[row]
                 self.objects[objectID] = inputCentroids[col]
                 self.disappeared[objectID] = 0
@@ -110,6 +113,7 @@ class CentroidTracker():
             # there could be not examined value , let;s examined them as well
             unUsedRows = set(range(0, distanceMap.shape[0])).difference(usedRows)
             unUsedCols = set(range(0, distanceMap.shape[1])).difference(usedCols)
+
 
 
             if distanceMap.shape[0] >= distanceMap.shape[1]:
