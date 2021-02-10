@@ -14,7 +14,7 @@ import numpy as np
 
 
 class CentroidTracker():
-    def __init__(self, maxDisappeared= 50):
+    def __init__(self, maxDisappeared= 50, maxDistance=50):
         self.nextObjectID = 0 #A counter used to assign unique IDs to each object 
         self.objects = OrderedDict() #utilizes the object ID as the key and the centroid (x, y)-coordinates as the value
         self.disappeared = OrderedDict()# consecutive frames (value) a particular object ID (key) has been marked as “lost
@@ -22,6 +22,12 @@ class CentroidTracker():
         # object is allowed to be marked as "disappeared" until we
         # need to deregister the object from tracking
         self.maxDisappeared = maxDisappeared
+        
+        
+        # store the maximum distance between centroids to associate
+        # an object -- if the distance is larger than this maximum
+        # distance we'll start to mark the object as "disappeared"
+        self.maxDistance = maxDistance
     
     
     # when registering an object we use the next available object
@@ -54,7 +60,7 @@ class CentroidTracker():
                 # missing, deregister it
                 if self.disaappeared[objectID] > self.maxDisappeared:
                     self.deregister(objectID)
-
+                    
             return self.objects
 
         # if we have detected objs
@@ -97,6 +103,12 @@ class CentroidTracker():
                 if row in usedRows or col in usedCols:
                     continue
 
+                # if the distance between centroids is greater than
+				# the maximum distance, do not associate the two
+				# centroids to the same object
+                if D[row, col] > self.maxDistance:
+                    continue
+                    
                 #else we need set new centroid and reset disappeared counter
                 objectID = objectIDs[row]
                 self.objects[objectID] = inputCentroids[col]
