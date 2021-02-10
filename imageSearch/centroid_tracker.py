@@ -14,7 +14,9 @@ import numpy as np
 
 
 class CentroidTracker():
-    def __init__(self, maxDisappeared= 50):
+
+    def __init__(self, maxDisappeared= 50, maxDistance=50):
+
         self.nextObjectID = 0 #A counter used to assign unique IDs to each object 
         self.objects = OrderedDict() #utilizes the object ID as the key and the centroid (x, y)-coordinates as the value
         self.disappeared = OrderedDict()# consecutive frames (value) a particular object ID (key) has been marked as “lost
@@ -22,6 +24,12 @@ class CentroidTracker():
         # object is allowed to be marked as "disappeared" until we
         # need to deregister the object from tracking
         self.maxDisappeared = maxDisappeared
+       
+        # store the maximum distance between centroids to associate
+        # an object -- if the distance is larger than this maximum
+        # distance we'll start to mark the object as "disappeared"
+        self.maxDistance = maxDistance
+
     
     
     # when registering an object we use the next available object
@@ -63,8 +71,10 @@ class CentroidTracker():
         # 0 means startPoint and 1 means endPoint
         for (i, (x0, y0, x1, y1)) in enumerate(bbox):
             #calculate center of bounding box and return as int 
+
             cX = (x0 + x1) //2.0
             cY = (y0 + y1) //2.0
+
             inputCentroids[i] = (cX, cY)
 
 
@@ -97,18 +107,27 @@ class CentroidTracker():
                 if row in usedRows or col in usedCols:
                     continue
 
+
+                # if the distance between centroids is greater than
+				# the maximum distance, do not associate the two
+				# centroids to the same object
+                if D[row, col] > self.maxDistance:
+                    continue
+                    
                 #else we need set new centroid and reset disappeared counter
-                objID = objectIDs[row]
-                self.objects[objID] = inputCentroids[col]
-                self.disappeared[objID] = 0
+                objectID = objectIDs[row]
+                self.objects[objectID] = inputCentroids[col]
+                self.disappeared[objectID] = 0
 
                 #update with cords
-                usedCols.add(col)
                 usedRows.add(row)
+                usedCols.add(col)
+                
 
             # there could be not examined value , let;s examined them as well
             unUsedRows = set(range(0, distanceMap.shape[0])).difference(usedRows)
-            unUsedCols = set(range(0, distanceMap.shape[1])).difference(userCols)
+            unUsedCols = set(range(0, distanceMap.shape[1])).difference(usedCols)
+
 
 
             if distanceMap.shape[0] >= distanceMap.shape[1]:
