@@ -106,13 +106,13 @@ class CentroidTracker():
                 # if the distance between centroids is greater than
 				# the maximum distance, do not associate the two
 				# centroids to the same object
-                if D[row, col] > self.maxDistance:
+                if distanceMap[row, col] > self.maxDistance:
                     continue
                     
                 #else we need set new centroid and reset disappeared counter
-                objectID = objectIDs[row]
-                self.objects[objectID] = inputCentroids[col]
-                self.disappeared[objectID] = 0
+                objID = objectIDs[row]
+                self.objects[objID] = inputCentroids[col]
+                self.disappeared[objID] = 0
 
                 #update with cords
                 usedRows.add(row)
@@ -129,8 +129,8 @@ class CentroidTracker():
                     objID = objectIDs[row]
                     self.disappeared[objID] += 1
 
-                if self.disappeared[objectID] > self.maxDisappeared:
-                    self.deregister(objectID)
+                if self.disappeared[objID] > self.maxDisappeared:
+                    self.deregister(objID)
                 else:
                     for col in unUsedCols:
                         self.register(inputCentroids[col])
