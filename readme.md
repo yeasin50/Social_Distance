@@ -1,5 +1,9 @@
 Required Python libraries for people counting  
-This peoject is combination of object detection and object tracking.  Check other banches
+This peoject is combination of object detection and object tracking.  Check other banches 
+- [Centroid](https://github.com/yeasin50/Social_Distance/tree/Centroid)
+- [People Counter](https://github.com/yeasin50/Social_Distance/tree/peopleCounter) 
+- [Main](https://github.com/yeasin50/Social_Distance/tree/main)
+
 
 In order to build our people counting applications, we’ll need a number of different Python libraries, including:
 
