@@ -1,0 +1,1 @@
+this database is quite large , here is the yolo db, follow[dnn darknet](https://drive.google.com/drive/folders/1aWud0qy2FM3s9AJWN2JEXM8Y4Rn5AYOj?usp=sharing) 
